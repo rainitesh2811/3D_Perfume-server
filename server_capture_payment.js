@@ -9,7 +9,7 @@ const path = require('path');
 const app = express();
 
 app.use(cors({
-  origin: ['https://unitedlearning.in', 'https://www.unitedlearning.in']
+  origin: ['https://3-d-perfume.vercel.app/', 'http://localhost:3000']
 }));
 
 app.use(express.json());
