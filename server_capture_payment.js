@@ -9,7 +9,7 @@ const path = require('path');
 const app = express();
 
 app.use(cors({
-  origin: ['https://3-d-perfume.vercel.app/', 'http://localhost:3000']
+  origin: ['https://3-d-perfume.vercel.app', 'http://localhost:3000', 'https://threed-perfume-server.onrender.com']
 }));
 
 app.use(express.json());
