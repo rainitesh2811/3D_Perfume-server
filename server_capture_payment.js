@@ -25,6 +25,27 @@ app.get('/', (req, res) => {
   res.send('Backend is running.');
 });
 
+// Create a Razorpay order without exposing the secret key to the browser.
+app.post('/server_create_order', async (req, res) => {
+  const { amount, receipt } = req.body;
+
+  if (!Number.isFinite(Number(amount)) || Number(amount) <= 0) {
+    return res.status(400).json({ success: false, error: 'A valid amount is required.' });
+  }
+
+  try {
+    const order = await razorpayInstance.orders.create({
+      amount: Math.round(Number(amount) * 100),
+      currency: 'INR',
+      receipt: String(receipt || `receipt_${Date.now()}`).slice(0, 40)
+    });
+    res.status(200).json({ success: true, data: order });
+  } catch (error) {
+    console.error('Order creation failed:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // 🔁 Razorpay capture route
 app.post('/server_capture_payment', async (req, res) => {
   const { paymentId, amount } = req.body;
