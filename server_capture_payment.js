@@ -50,8 +50,23 @@ app.post('/server_create_order', async (req, res) => {
 app.post('/server_capture_payment', async (req, res) => {
   const { paymentId, amount } = req.body;
 
+  if (!paymentId || !Number.isInteger(Number(amount)) || Number(amount) <= 0) {
+    return res.status(400).json({ success: false, error: 'A valid paymentId and amount in paise are required.' });
+  }
+
   try {
-    const response = await razorpayInstance.payments.capture(paymentId, amount);
+    const payment = await razorpayInstance.payments.fetch(paymentId);
+    if (payment.status === 'captured') {
+      return res.status(200).json({ success: true, data: payment });
+    }
+    if (payment.status !== 'authorized') {
+      return res.status(409).json({ success: false, error: `Payment cannot be captured from status: ${payment.status}.` });
+    }
+    if (Number(payment.amount) !== Number(amount)) {
+      return res.status(400).json({ success: false, error: 'Payment amount does not match the order amount.' });
+    }
+
+    const response = await razorpayInstance.payments.capture(paymentId, Number(amount));
     console.log('Payment captured:', response);
     res.status(200).json({ success: true, data: response });
   } catch (error) {
