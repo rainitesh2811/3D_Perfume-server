@@ -12,7 +12,6 @@ app.use(cors({
   origin: [
     'https://pollenstore.in',
     'https://www.pollenstore.in',
-    'http://localhost:3000',
     'https://threed-perfume-server.onrender.com'
   ]
 }));
