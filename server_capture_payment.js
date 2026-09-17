@@ -9,9 +9,14 @@ const path = require('path');
 const app = express();
 
 app.use(cors({
-  origin: ['https://3-d-perfume.vercel.app', 'http://localhost:3000', 'https://threed-perfume-server.onrender.com']
+  origin: [
+    'https://pollenstore.in',
+    'https://www.pollenstore.in',
+    'https://3-d-perfume.vercel.app',
+    'http://localhost:3000',
+    'https://threed-perfume-server.onrender.com'
+  ]
 }));
-
 app.use(express.json());
 
 // 🔐 Use environment variables for Razorpay keys
